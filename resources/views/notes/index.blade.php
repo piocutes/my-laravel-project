@@ -84,7 +84,7 @@
             }
 
             .container {
-                max-width: 900px;
+                max-width: 901px;
                 margin: 25px auto;
                 padding: 0 15px;
                 display: flex;
