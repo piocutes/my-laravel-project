@@ -39,6 +39,16 @@ class NoteController extends Controller
         return redirect()->route("notes.index")->with('success', 'Note created successfully!');
     }
 
+
+    /**
+     * Display the specified note.
+     */
+    public function show(Note $note)
+    {
+        return view("notes.show", ["note" => $note]);
+    }
+
+
     /**
      * Show the form for editing the specified note.
      */

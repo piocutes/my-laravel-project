@@ -3,94 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a Note</title>
+    <title>Create Note</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
             margin: 0;
-            background-color: #f0e1e1; /* Pastel background */
-            padding: 20px;
-            border: 10px solid #ccc; /* Border for the whole page */
-            border-radius: 8px; /* Rounded corners */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+            padding: 0;
+            background-color: #bed1e6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        h1 {
-            text-align: center;
-            color: #333;
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            padding: 30px; /* Increased top padding for more space */
+            padding-right: 50px;
+            height: 500px;
+            background-image: url('https://img.freepik.com/free-vector/cute-celebration-background-cute-grid-pattern-with-colorful-bokeh-vector_53876-146719.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 40px 40px 40px 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
-            font-family: 'Georgia', serif; /* Different font for title */
         }
-        input[type="text"] {
+
+        small {
+            display: inline-block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        input[type="text"], textarea {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: none; /* No border */
-            background: transparent; /* Transparent background */
-            font-size: 16px;
-            outline: none;
-            color: #555; /* Darker text color for contrast */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px; 
+            font-size: 18px;
+            margin-bottom: 10px;
+            scrollbar-width: none;
         }
+
         textarea {
-            width: 100%;
-            height: 200px;
-            padding: 10px;
-            margin: 10px 0;
-            border: none; /* No border */
-            background: transparent; /* Transparent background */
+            height: 250px; 
+            resize: none; 
+            font-family: Arial, sans-serif;
+        }
+
+        .btn {
+            padding: 10px 20px;
             font-size: 16px;
-            outline: none;
-            resize: none; /* Disable resizing */
-            color: #555; /* Darker text color for contrast */
-        }
-        input[type="text"]::placeholder,
-        textarea::placeholder {
-            color: #bbb; /* Lighter placeholder color */
-        }
-        .divider {
-            width: 100%;
-            height: 1px; /* Height of the line */
-            background-color: #ccc; /* Line color */
-            margin: 10px 0; /* Margin around the line */
-        }
-        input[type="submit"] {
-            background-color: #5cb85c;
+            border-radius: 5px;
+            text-decoration: none;
             color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 16px;
             margin-top: 10px;
-            width: 100%;
+            display: inline-block; 
         }
-        input[type="submit"]:hover {
-            background-color: #4cae4c;
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;   
         }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
     </style>
+    <script>
+        function updateCharacterCount() {
+            const textarea = document.getElementById('noteBody');
+            const characterCount = textarea.value.length;
+            const maxCharacters = 10000;
+            document.getElementById('characterCount').textContent = `${characterCount}/${maxCharacters} characters`;
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('currentDateTime').textContent = now.toLocaleString('en-US', options);
+        }
+
+        window.onload = function() {
+            updateDateTime();
+            setInterval(updateDateTime, 60000); // Update every minute
+        };
+    </script>
 </head>
 <body>
-    <h1>Create a Note</h1>
-    <form method="post" action="{{ route('notes.store') }}">
-        @csrf        
-        <!-- Removed @method('post') as it's redundant -->
-        <div>
-            <input type="text" id="title" name="title" placeholder="Title" required />
-        </div>
 
-        <div class="divider"></div> <!-- Subtle dividing line -->
-
-        <div>
-            <textarea id="body" name="body" placeholder="Write something..." required></textarea>
+    <div class="container">
+        <div class="header">
+            <a href="{{ route('notes.index') }}" class="btn btn-secondary">Back to Notes</a>
         </div>
+        <form action="{{ route('notes.store') }}" method="POST">
+            @csrf
+            <input type="text" name="title" placeholder="Enter note title" required>
+            <div>
+                <small id="currentDateTime"></small>
+                <small>|</small>
+                <small id="characterCount">0/10000 characters</small>
+            </div>
+            <textarea id="noteBody" name="body" placeholder="Write your note here..." required oninput="updateCharacterCount()"></textarea>
+            <button type="submit" class="btn btn-primary">Save Note</button>
+        </form>
+    </div>
 
-        <div>
-            <input type="submit" value="Save">
-        </div>
-    </form>
 </body>
 </html>
