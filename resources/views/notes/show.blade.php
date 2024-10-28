@@ -11,74 +11,145 @@
             padding: 0;
             background-color: #bed1e6;
             display: flex;
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-            
-        } 
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
         .container {
-            width: 90%;
+            width: calc(100% - 40px);
+            height: calc(100vh - 40px);
             max-width: 800px;
             padding: 20px;
-            height: 500px;
-            background-image: url('https://img.freepik.com/free-vector/cute-celebration-background-cute-grid-pattern-with-colorful-bokeh-vector_53876-146719.jpg'); /* Background image */
-            background-size: cover; /* Ensure the image covers the entire background */
-            background-position: center; /* Center the image */
-            background-repeat: no-repeat; /* Prevent the image from repeating */
+            background-image: url('https://img.freepik.com/free-vector/cute-celebration-background-cute-grid-pattern-with-colorful-bokeh-vector_53876-146719.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            margin: 40px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            margin: 20px;
+            overflow: auto;
         }
+        
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            
+            flex-wrap: wrap; 
         }
+
+        .left-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
         h1 {
             font-size: 24px;
             margin: 0;
         }
+
         small {
-            display: block;
-            margin: 10px 0;
             font-size: 14px;
             color: #666;
+            display: block;
+            margin: 10px 0;
         }
+
         .content {
-            max-height: 350px; /* Set a max height for scrolling */
-            overflow-y: auto; /* Allow vertical scrolling */
+            max-height: 350px;
+            overflow-y: auto;
             padding-bottom: 20px;
+            flex-grow: 1; 
         }
+
         .content::-webkit-scrollbar {
-            display: none; /* Hide scrollbar for WebKit browsers */
+            display: none;
         }
+        
         .content {
-            -ms-overflow-style: none; /* Hide scrollbar for Internet Explorer and Edge */
-            scrollbar-width: none; /* Hide scrollbar for Firefox */
+            -ms-overflow-style: none; 
+            scrollbar-width: none; 
         }
+
         p {
             font-size: 18px;
             line-height: 1.6;
             margin: 0;
         }
+
         .btn {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 8px 12px; 
+            font-size: 14px; 
             border-radius: 5px;
             text-decoration: none;
             color: white;
+            display: inline-block;
+            text-align: center;
+            white-space: nowrap;
+            flex-shrink: 0; 
         }
+
         .btn-primary {
             background-color: #007bff;
-            border: none;   
+            border: none;
         }
+
         .btn-danger {
             background-color: #dc3545;
         }
+
         .btn-secondary {
             background-color: #6c757d;
+        }
+
+        /* Responsive styling */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            small, p {
+                font-size: 14px;
+            }
+
+            .btn {
+                padding: 6px 10px; 
+                font-size: 12px;
+                width: auto; 
+            }
+
+            .content {
+                max-height: 400px; 
+            }
+
+            .right-buttons {
+                flex-direction: column;
+                gap: 5px; 
+            }
         }
     </style>
 </head>
@@ -86,16 +157,18 @@
 
     <div class="container">
         <div class="header">
-            <a href="{{ route('notes.index') }}" class="btn btn-secondary">Back to Notes</a>
-            <div>
-                <a href="{{ route('notes.edit', $note->id) }}" class="btn btn-primary">Edit</a>
-                <a href="{{ route('notes.delete', $note->id) }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this note?');">Delete</a>
+            <div class="left-buttons">
+                <a href="{{ route('notes.index') }}" class="btn btn-secondary">Back to Notes</a>
             </div>
         </div>
         <h1>{{ $note->title }}</h1>
         <small>Created: {{ $note->created_at->format('F d h:i A D') }} | {{ strlen($note->body) }}/10000 characters</small>
         <div class="content">
             <p>{{ $note->body }}</p>
+        </div>
+        <div class="right-buttons" style="display: flex; gap: 10px; margin-top: 20px;">
+            <a href="{{ route('notes.edit', $note->id) }}" class="btn btn-primary">Edit</a>
+            <a href="{{ route('notes.delete', $note->id) }}" class="btn btn-danger">Delete</a>
         </div>
     </div>
 

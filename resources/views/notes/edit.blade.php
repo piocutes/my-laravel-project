@@ -13,14 +13,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
         }
 
         .container {
-            width: 90%;
+            width: calc(100% - 40px); 
+            height: calc(100vh - 40px); 
             max-width: 800px;
-            padding: 30px;
-            padding-right: 50px;
-            height: 500px;
+            padding: 20px;
             background-image: url('https://img.freepik.com/free-vector/cute-celebration-background-cute-grid-pattern-with-colorful-bokeh-vector_53876-146719.jpg');
             background-size: cover;
             background-position: center;
@@ -28,7 +29,10 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            margin: 40px 40px 40px 0;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            margin: 20px; 
         }
 
         .header {
@@ -36,6 +40,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         small {
@@ -45,19 +50,39 @@
             color: #666;
         }
 
-        input[type="text"], textarea {
+        input[type="text"] {
             width: 100%;
             border: 1px solid #ccc;
             border-radius: 5px;
-            padding: 10px; 
+            padding: 10px;
             font-size: 18px;
             margin-bottom: 10px;
+            background: none;
+            box-sizing: border-box;
         }
 
         textarea {
-            height: 250px; 
-            resize: none; 
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 18px;
+            background: none;
+            resize: none;
             font-family: Arial, sans-serif;
+            flex-grow: 1; 
+            overflow-y: auto;
+            box-sizing: border-box;
+            max-height: calc(100% - 150px); 
+        }
+
+      
+        textarea::-webkit-scrollbar {
+            display: none;
+        }
+        textarea {
+            -ms-overflow-style: none; 
+            scrollbar-width: none; 
         }
 
         .btn {
@@ -67,16 +92,41 @@
             text-decoration: none;
             color: white;
             margin-top: 10px;
-            display: inline-block; 
+            display: inline-block;
         }
 
         .btn-primary {
             background-color: #007bff;
-            border: none;   
+            border: none;
         }
 
         .btn-secondary {
             background-color: #6c757d;
+        }
+
+        /* Responsive styling for smaller screens */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+
+            input[type="text"], textarea {
+                font-size: 16px;
+                padding: 8px;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 375px) {
+            input[type="text"], textarea {
+                font-size: 14px;
+                padding: 6px;
+            }
         }
     </style>
 </head>
@@ -84,22 +134,22 @@
 
     <div class="container">
         <div class="header">
-            <a href="{{ route('notes.index' ) }}" class="btn btn-secondary">Back to Notes</a>
+            <a href="{{ route('notes.index') }}" class="btn btn-secondary">Back to notes</a>
         </div>
-        <form method="POST" action="{{ route('notes.update', ['note' => $note]) }}">
+        <form method="POST" action="{{ route('notes.update', ['note' => $note]) }}" style="display: flex; flex-direction: column; height: 100%;">
             @csrf 
             @method('PUT')
 
-            <input type="text" name="title" placeholder="Enter note title" value="{{ old('title', $note->title) }}" required>
-            
+            <input type="text" name="title" maxlength="20" placeholder="Enter note title" value="{{ old('title', $note->title) }}" required>
+
             <div>
                 <small id="currentDateTime"></small>
                 <small>|</small>
                 <small id="characterCount">0/10000 characters</small>
             </div>
 
-            <textarea id="body" name="body" placeholder="Write your note here..." required oninput="updateCharacterCount()">{{ old('body', $note->body) }}</textarea>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <textarea id="body" name="body" maxlength="10000" placeholder="Write your note here..." required oninput="updateCharacterCount()">{{ old('body', $note->body) }}</textarea>
+            <button type="submit" class="btn btn-primary">✔</button>
         </form>
     </div>
 

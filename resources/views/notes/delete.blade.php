@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0e1e1; /* Pastel background */
+            background-color:  #bed1e6; /* Pastel background */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -22,6 +22,7 @@
             text-align: center;
             max-width: 400px;
             width: 100%;
+            margin: 20px;
         }
         h2 {
             color: #d9534f; /* Bootstrap danger color */
@@ -72,7 +73,7 @@
             <form method="POST" action="{{ route('notes.destroy', ['note' => $note]) }}">
                 @csrf
                 @method('DELETE')
-                <button type="submit">Yes, Delete</button>
+                <button type="submit">Yes</button>
             </form>
             <a href="{{ route('notes.index') }}">
                 <button type="button">Cancel</button>

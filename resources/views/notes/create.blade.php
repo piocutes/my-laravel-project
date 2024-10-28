@@ -13,22 +13,25 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            overflow: hidden; 
         }
 
         .container {
-            width: 90%;
+            width: calc(100% - 40px); 
+            height: calc(100vh - 40px); 
             max-width: 800px;
-            padding: 30px; /* Increased top padding for more space */
-            padding-right: 50px;
-            height: 500px;
+            padding: 20px;
             background-image: url('https://img.freepik.com/free-vector/cute-celebration-background-cute-grid-pattern-with-colorful-bokeh-vector_53876-146719.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            margin: 40px 40px 40px 0;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            margin: 20px;
         }
 
         .header {
@@ -39,8 +42,6 @@
         }
 
         small {
-            display: inline-block;
-            margin-bottom: 10px;
             font-size: 14px;
             color: #666;
         }
@@ -49,16 +50,35 @@
             width: 100%;
             border: 1px solid #ccc;
             border-radius: 5px;
-            padding: 10px; 
+            padding: 10px;
             font-size: 18px;
             margin-bottom: 10px;
-            scrollbar-width: none;
+            box-sizing: border-box;
+            background: none;
         }
 
         textarea {
-            height: 250px; 
-            resize: none; 
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 18px;
+            background: none;
+            resize: none;
             font-family: Arial, sans-serif;
+            flex-grow: 1; 
+            overflow-y: auto; 
+            box-sizing: border-box;
+            max-height: calc(100% - 150px); 
+        }
+
+        /* Hide the scrollbar */
+        textarea::-webkit-scrollbar {
+            display: none;
+        }
+        textarea {
+            -ms-overflow-style: none; 
+            scrollbar-width: none;
         }
 
         .btn {
@@ -67,19 +87,44 @@
             border-radius: 5px;
             text-decoration: none;
             color: white;
-            margin-top: 10px;
-            display: inline-block; 
+            margin: 10px;
+            display: inline-block;
         }
 
         .btn-primary {
             background-color: #007bff;
-            border: none;   
+            border: none;
+
         }
 
         .btn-secondary {
             background-color: #6c757d;
         }
 
+        /* Responsive styling */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+
+            input[type="text"], textarea {
+                font-size: 16px;
+                padding: 8px;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 375px) {
+            input[type="text"], textarea {
+                font-size: 14px;
+                padding: 6px;
+            }
+        }
     </style>
     <script>
         function updateCharacterCount() {
@@ -97,7 +142,7 @@
 
         window.onload = function() {
             updateDateTime();
-            setInterval(updateDateTime, 60000); // Update every minute
+            setInterval(updateDateTime, 60000);
         };
     </script>
 </head>
@@ -107,16 +152,16 @@
         <div class="header">
             <a href="{{ route('notes.index') }}" class="btn btn-secondary">Back to Notes</a>
         </div>
-        <form action="{{ route('notes.store') }}" method="POST">
+        <form action="{{ route('notes.store') }}" method="POST" style="display: flex; flex-direction: column; height: 100%;">
             @csrf
-            <input type="text" name="title" placeholder="Enter note title" required>
+            <input type="text" name="title" maxlength="20" placeholder="Enter note title" required>
             <div>
                 <small id="currentDateTime"></small>
                 <small>|</small>
                 <small id="characterCount">0/10000 characters</small>
             </div>
-            <textarea id="noteBody" name="body" placeholder="Write your note here..." required oninput="updateCharacterCount()"></textarea>
-            <button type="submit" class="btn btn-primary">Save Note</button>
+            <textarea id="noteBody" name="body" maxlength="10000" placeholder="Write your note here..." required oninput="updateCharacterCount()"></textarea>
+            <button type="submit" class="btn btn-primary">✔</button>
         </form>
     </div>
 
